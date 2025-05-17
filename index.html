@@ -1,12 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo</title>
+  <meta charset="UTF-8">
+  <title>Like Buttons with Images</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      gap: 20px;
+    }
+
+    .post {
+      width: 300px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .post img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .post-footer {
+      padding: 10px 15px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .like-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 20px;
+      background-color: #eee;
+      color: #444;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .like-button.liked {
+      background-color: #1877f2;
+      color: white;
+    }
+
+    .heart {
+      font-size: 18px;
+      transition: transform 0.2s;
+    }
+
+    .like-button.liked .heart {
+      transform: scale(1.2);
+    }
+  </style>
 </head>
 <body>
-    <h1>It is a Demo website</h1>
-    <h2>It is a test 3</h2>
+
+  <div class="post">
+    <img src="/images/image_1.jpg" alt="Post 1">
+    <div class="post-footer">
+      <button class="like-button" data-count="58">
+        <span class="heart">❤️</span>
+        <span class="count">58</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="post">
+    <img src="/images/image_2.jpg" alt="Post 2">
+    <div class="post-footer">
+      <button class="like-button" data-count="103">
+        <span class="heart">❤️</span>
+        <span class="count">103</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.like-button').forEach(button => {
+      let liked = false;
+      let count = parseInt(button.dataset.count);
+      const countSpan = button.querySelector('.count');
+
+      button.addEventListener('click', () => {
+        liked = !liked;
+        button.classList.toggle('liked', liked);
+        count += liked ? 1 : -1;
+        countSpan.textContent = count;
+      });
+    });
+  </script>
+
 </body>
 </html>
