@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NYM - Images</title>
+  <title>Social Media Posts</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -70,43 +70,47 @@
 </head>
 <body>
 
-  <!-- Repeat posts -->
-  <script>
-    const postContainer = document.body;
-    const imageCount = 15;
+<script>
+  const likeCounts = [
+    58, 103, 77, 89, 42,
+    110, 65, 99, 24, 38,
+    81, 56, 74, 93, 68
+  ];
 
-    for (let i = 1; i <= imageCount; i++) {
-      const likeStart = Math.floor(Math.random() * 100) + 1; // random starting likes
-      const post = document.createElement('div');
-      post.className = 'post';
-      post.innerHTML = `
-        <img src="/images/image_${i}.jpg" alt="Post ${i}">
-        <div class="post-footer">
-          <button class="like-button" data-count="${likeStart}">
-            <span class="heart">❤️</span>
-            <span class="count">${likeStart}</span>
-          </button>
-        </div>
-      `;
-      postContainer.appendChild(post);
-    }
+  const postContainer = document.body;
 
-    // Like button logic
-    setTimeout(() => {
-      document.querySelectorAll('.like-button').forEach(button => {
-        let liked = false;
-        let count = parseInt(button.dataset.count);
-        const countSpan = button.querySelector('.count');
+  for (let i = 1; i <= 15; i++) {
+    const count = likeCounts[i - 1];
+    const post = document.createElement('div');
+    post.className = 'post';
+    post.innerHTML = `
+      <img src="/images/image_${i}.jpg" alt="Post ${i}">
+      <div class="post-footer">
+        <button class="like-button" data-count="${count}">
+          <span class="heart">❤️</span>
+          <span class="count">${count}</span>
+        </button>
+      </div>
+    `;
+    postContainer.appendChild(post);
+  }
 
-        button.addEventListener('click', () => {
-          liked = !liked;
-          button.classList.toggle('liked', liked);
-          count += liked ? 1 : -1;
-          countSpan.textContent = count;
-        });
+  // Like button toggle logic
+  setTimeout(() => {
+    document.querySelectorAll('.like-button').forEach(button => {
+      let liked = false;
+      let count = parseInt(button.dataset.count);
+      const countSpan = button.querySelector('.count');
+
+      button.addEventListener('click', () => {
+        liked = !liked;
+        button.classList.toggle('liked', liked);
+        count += liked ? 1 : -1;
+        countSpan.textContent = count;
       });
-    }, 0);
-  </script>
+    });
+  }, 0);
+</script>
 
 </body>
 </html>
